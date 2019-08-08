@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#read in the data
 fr = open('three-day-temperature1.txt', 'r')
+
+#make datapoints with the time of the recording and the temperature at the time of recording the datapoint
 lines = fr.readlines()
 data = []
 dates = []
@@ -17,6 +20,7 @@ x_time = range(len(data))
 colors1 = ['red', 'cyan', 'black']
 markers = ['^', 'D', 's']
 
+#initialize the plot
 fig = plt.figure(1)
 ax = fig.gca()
 #ax.set_title('temperature')
@@ -28,6 +32,7 @@ ax.set_xticks(range(0, 25, 2))
 ax.set_xlabel('Time of Day')
 ax.set_ylabel('Living Room Temperature')
 
+#split the temperature data into three separate series base on the day that the recording occurred on
 day1 = []
 time1 = []
 day2 = []
@@ -52,7 +57,7 @@ largest = []
 L1 = len(time1)
 L2 = len(time2)
 L3 = len(time3)
-#determine which is largest
+#determine which series is largest
 if (L1 > L2) and (L1 > L3):
    largest = L1
 elif (L2 > L1) and (L2 > L3):
@@ -84,9 +89,10 @@ for i in range(largest):
         xavg.append( (time1[i] + time2[i] + time3[i]) / 3 )
         yavg.append( (day1[i] + day2[i] + day3[i]) / 3 )
 
-fit = np.polyfit(xavg,yavg,5)
+fit = np.polyfit(xavg,yavg,5) #perform polynomial regression of degree 5 on the three series to get a set of average points 
 fit_fn = np.poly1d(fit)
 
+#plot the three series, as well as the regression line
 plt.plot(xavg,yavg, 'gx', xavg, fit_fn(xavg), '--g')
 
 p1 = plt.scatter(time1, day1, marker=markers[0], color=colors1[0], label='1', s = 30)
